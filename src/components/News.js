@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import NewsItems from './newsItems'
 
 export class News extends Component {
-    article = [
+    articles = [
         {
           "source": {
             "id": "news24",
@@ -46,22 +46,54 @@ export class News extends Component {
     constructor () {
         super();
         this.state = {
-            articles: this.article,
-            loading: false
+            articles: this.articles,
+            loading: false,
+            page: 1
         }
+        this.nextPage = this.nextPage.bind(this)
+        this.previousPage = this.previousPage.bind(this)
     }
+
+    async componentDidMount() {
+      let url = "https://newsapi.org/v2/top-headlines?country=in&category=sport&apiKey=af8d9d5e03cb4be792931ea169affcbe&page=1&pageSize=20";
+      let data = await fetch(url);
+      let parseData = await data.json();
+      this.setState({articles: parseData.articles, totalResults: parseData.totalResults})
+      // console.log(this.state.totalResults)
+    }
+
+    async previousPage() {
+      let url = `https://newsapi.org/v2/top-headlines?country=in&category=sport&apiKey=af8d9d5e03cb4be792931ea169affcbe&page=${this.state.page - 1}&pageSize=20`;
+      let data = await fetch(url);
+      let parseData = await data.json();
+      this.setState({articles: parseData.articles, page: this.state.page - 1})
+      // console.log(this.state.totalResults)
+    }
+    
+    async nextPage() {
+      let url = `https://newsapi.org/v2/top-headlines?country=in&category=sport&apiKey=af8d9d5e03cb4be792931ea169affcbe&page=${this.state.page + 1}&pageSize=20`;
+      let data = await fetch(url);
+      let parseData = await data.json();
+      this.setState({articles: parseData.articles, page: this.state.page + 1})
+      // console.log(this.state.totalResults, this.state.page)
+    }
+
   render() {
     return (
       <div>
         <h1 className='my-3'>Top News - Headlines</h1>
         <div className="container my-5">
             <div className="row">
-                {this.article.map(element => {
-                return <div key={element.url} className="col-md-4">
+                {this.state.articles.map(element => {
+                return <div key={element.url} className="col-md-4 my-3">
                     <NewsItems title={element.title} description={element.description} imageUrl={element.urlToImage} url={element.url}/>
                 </div>
                 })}
                 </div>
+            </div>
+            <div className="container d-flex justify-content-between mb-5">
+                <button disabled={this.state.page<=1} type="button" className="btn-sm btn btn-primary" onClick={this.previousPage}>&larr; previous</button>
+                <button disabled={this.state.page >= Math.ceil(this.state.totalResults/20)} type="button" className="btn-sm btn btn-primary" onClick={this.nextPage}>Next &rarr;</button>
             </div>
         </div>
     )
