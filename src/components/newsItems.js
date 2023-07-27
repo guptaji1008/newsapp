@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export class NewsItems extends Component {
+export class newsItems extends Component {
   render() {
     return (
       <div>
@@ -10,4 +10,4 @@ export class NewsItems extends Component {
   }
 }
 
-export default NewsItems
+export default newsItems
