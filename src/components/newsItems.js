@@ -7,10 +7,10 @@ export class newsItems extends Component {
     return (
       <div>
         <div className="card">
-            <img src={imageUrl} className="card-img-top" alt="please wait"/>
+            <img src={imageUrl} className="card-img-top" alt="Image not found"/>
             <div className="card-body">
-                <h5 className="card-title">{title}...</h5>
-                <p className="card-text">{description}...</p>
+                <h5 className="card-title">{title}</h5>
+                <p className="card-text">{description}</p>
                 <a href={url} target='_blank' className="btn btn-primary">Detail</a>
                 <div className="text-body-secondary mt-3">Author: {author?author:"unknown"}</div>
                 <div className="text-body-secondary">Published at: {new Date(time).toGMTString()}</div>
